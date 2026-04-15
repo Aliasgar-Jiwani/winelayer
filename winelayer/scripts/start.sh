@@ -17,7 +17,7 @@ if [ -f "$SCRIPT_DIR/daemon/winelayer-daemon" ] && [ -f "$SCRIPT_DIR/ui/winelaye
     echo "[WineLayer] Starting compiled release..."
     "$SCRIPT_DIR/daemon/winelayer-daemon" &
     DAEMON_PID=$!
-    sleep 1
+    sleep 3
     "$SCRIPT_DIR/ui/winelayer_app"
     kill "$DAEMON_PID" 2>/dev/null || true
     exit 0
@@ -32,7 +32,7 @@ if [ -f "$DAEMON_BIN" ] && [ -f "$UI_BIN" ]; then
     echo "[WineLayer] Starting local compiled build..."
     "$DAEMON_BIN" &
     DAEMON_PID=$!
-    sleep 1
+    sleep 3
     "$UI_BIN"
     kill "$DAEMON_PID" 2>/dev/null || true
     exit 0
