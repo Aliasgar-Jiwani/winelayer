@@ -1,0 +1,167 @@
+{
+  "notepadplusplus": {
+    "display_name": "Notepad++",
+    "status": "working",
+    "report_count": 142,
+    "last_updated": "2026-04",
+    "config_file": "notepadplusplus.yaml",
+    "category": "text-editor",
+    "description": "Lightweight source code editor with syntax highlighting and plugin support.",
+    "website": "https://notepad-plus-plus.org",
+    "size_estimate": "5 MB"
+  },
+  "vlc": {
+    "display_name": "VLC Media Player",
+    "status": "working",
+    "report_count": 98,
+    "last_updated": "2026-04",
+    "config_file": "vlc.yaml",
+    "category": "media",
+    "description": "Free cross-platform multimedia player that plays most formats.",
+    "website": "https://www.videolan.org",
+    "size_estimate": "42 MB"
+  },
+  "7zip": {
+    "display_name": "7-Zip",
+    "status": "working",
+    "report_count": 115,
+    "last_updated": "2026-04",
+    "config_file": "7zip.yaml",
+    "category": "utility",
+    "description": "High-compression file archiver with support for 7z, ZIP, RAR, and more.",
+    "website": "https://www.7-zip.org",
+    "size_estimate": "1.5 MB"
+  },
+  "libreoffice": {
+    "display_name": "LibreOffice",
+    "status": "partial",
+    "report_count": 54,
+    "last_updated": "2026-04",
+    "config_file": "libreoffice.yaml",
+    "category": "productivity",
+    "description": "Full-featured office suite compatible with Microsoft Office formats.",
+    "website": "https://www.libreoffice.org",
+    "size_estimate": "340 MB"
+  },
+  "paintdotnet": {
+    "display_name": "Paint.NET",
+    "status": "working",
+    "report_count": 37,
+    "last_updated": "2026-04",
+    "config_file": "paintdotnet.yaml",
+    "category": "graphics",
+    "description": "Image and photo editing software with layers, effects, and plugins.",
+    "website": "https://www.getpaint.net",
+    "size_estimate": "80 MB"
+  },
+  "irfanview": {
+    "display_name": "IrfanView",
+    "status": "working",
+    "report_count": 89,
+    "last_updated": "2026-04",
+    "config_file": "irfanview.yaml",
+    "category": "graphics",
+    "description": "Fast and compact image viewer and converter with batch processing.",
+    "website": "https://www.irfanview.com",
+    "size_estimate": "3 MB"
+  },
+  "foobar2000": {
+    "display_name": "foobar2000",
+    "status": "working",
+    "report_count": 67,
+    "last_updated": "2026-04",
+    "config_file": "foobar2000.yaml",
+    "category": "media",
+    "description": "Advanced freeware audio player with highly customizable interface.",
+    "website": "https://www.foobar2000.org",
+    "size_estimate": "8 MB"
+  },
+  "winrar": {
+    "display_name": "WinRAR",
+    "status": "working",
+    "report_count": 76,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "utility",
+    "description": "Powerful archive manager for RAR, ZIP, and other compressed formats.",
+    "website": "https://www.win-rar.com",
+    "size_estimate": "3.5 MB"
+  },
+  "sumatra_pdf": {
+    "display_name": "Sumatra PDF",
+    "status": "working",
+    "report_count": 52,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "productivity",
+    "description": "Lightweight PDF, eBook, and comic reader for Windows.",
+    "website": "https://www.sumatrapdfreader.org",
+    "size_estimate": "6 MB"
+  },
+  "keepass": {
+    "display_name": "KeePass",
+    "status": "working",
+    "report_count": 41,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "utility",
+    "description": "Free open-source password manager with strong encryption.",
+    "website": "https://keepass.info",
+    "size_estimate": "4 MB"
+  },
+  "sharex": {
+    "display_name": "ShareX",
+    "status": "partial",
+    "report_count": 23,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "utility",
+    "description": "Screen capture and file sharing tool with annotation and effects.",
+    "website": "https://getsharex.com",
+    "size_estimate": "7 MB"
+  },
+  "mpc_hc": {
+    "display_name": "MPC-HC",
+    "status": "working",
+    "report_count": 44,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "media",
+    "description": "Lightweight media player supporting all common video and audio formats.",
+    "website": "https://github.com/clsid2/mpc-hc",
+    "size_estimate": "15 MB"
+  },
+  "winamp": {
+    "display_name": "Winamp",
+    "status": "working",
+    "report_count": 61,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "media",
+    "description": "Classic audio player with visualizations, skins, and plugin support.",
+    "website": "https://www.winamp.com",
+    "size_estimate": "18 MB"
+  },
+  "greenshot": {
+    "display_name": "Greenshot",
+    "status": "working",
+    "report_count": 19,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "utility",
+    "description": "Screenshot tool for Windows with annotation and export options.",
+    "website": "https://getgreenshot.org",
+    "size_estimate": "2 MB"
+  },
+  "audacity": {
+    "display_name": "Audacity",
+    "status": "partial",
+    "report_count": 33,
+    "last_updated": "2026-04",
+    "config_file": "",
+    "category": "media",
+    "description": "Free open-source digital audio editor and recording software.",
+    "website": "https://www.audacityteam.org",
+    "size_estimate": "35 MB"
+  }
+}

@@ -1,0 +1,27 @@
+app_id: paintdotnet
+display_name: Paint.NET
+version_tested: "5.0.13"
+wine_version: stable
+windows_version: win10
+architecture: win64
+
+dependencies:
+  - dotnet48
+  - vcrun2019
+
+registry: []
+
+dxvk: false
+esync: false
+
+post_install: []
+
+known_issues:
+  - description: GPU rendering may cause visual glitches without DXVK
+    severity: moderate
+  - description: Some effects plugins may not load
+    severity: minor
+
+status: working
+last_verified: "2026-04"
+contributor: winelayer-team

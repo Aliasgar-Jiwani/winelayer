@@ -1,0 +1,88 @@
+name: Build & Release WineLayer
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          cd winelayer
+          pip install -e ".[dev]"
+          pip install pyinstaller
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang cmake ninja-build pkg-config \
+            libgtk-3-dev liblzma-dev libstdc++-12-dev
+
+      - name: Build Python daemon
+        run: |
+          cd winelayer
+          pyinstaller \
+            --onefile \
+            --name winelayer-daemon \
+            --add-data "compat-db:compat-db" \
+            --hidden-import "sqlalchemy.dialects.sqlite" \
+            daemon/main.py
+
+      - name: Build Flutter UI
+        run: |
+          cd winelayer/app
+          flutter pub get
+          flutter build linux --release
+
+      - name: Bundle release
+        run: |
+          mkdir -p release/WineLayer/daemon release/WineLayer/ui
+          cp winelayer/dist/winelayer-daemon release/WineLayer/daemon/
+          cp -r winelayer/app/build/linux/x64/release/bundle/. release/WineLayer/ui/
+          cp winelayer/scripts/start.sh release/WineLayer/WineLayer.sh
+          chmod +x release/WineLayer/WineLayer.sh
+          cd release
+          tar -czf WineLayer-linux-x86_64.tar.gz WineLayer/
+
+      - name: Upload Release Artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/WineLayer-linux-x86_64.tar.gz
+          body: |
+            ## WineLayer ${{ github.ref_name }}
+            
+            ### Installation
+            
+            **One-command install (recommended):**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/winelayer/scripts/install.sh | bash
+            ```
+            
+            **Manual install:**
+            1. Download `WineLayer-linux-x86_64.tar.gz`
+            2. Extract: `tar -xzf WineLayer-linux-x86_64.tar.gz`
+            3. Run: `./WineLayer/WineLayer.sh`
+            
+            ### Requirements
+            - Linux (Ubuntu 22.04+, Fedora 38+, Arch)
+            - Wine (auto-installed if missing)

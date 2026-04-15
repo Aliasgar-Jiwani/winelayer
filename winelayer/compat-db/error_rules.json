@@ -1,0 +1,52 @@
+[
+  {
+    "id": "vcrun2019_missing",
+    "pattern": "err:module:import_dll.*MSVCP140\\.dll|err:module:import_dll.*VCRUNTIME140\\.dll",
+    "fix": {
+      "action": "winetricks",
+      "args": ["vcrun2019"]
+    },
+    "description": "Missing Visual C++ 2019 runtime",
+    "confidence": 0.95
+  },
+  {
+    "id": "dotnet48_missing",
+    "pattern": "err:mscoree:load_ndirect.*mscoree\\.dll|err:module:import_dll.*mscoree\\.dll",
+    "fix": {
+      "action": "winetricks",
+      "args": ["dotnet48"]
+    },
+    "description": "Missing .NET Framework 4.8",
+    "confidence": 0.90
+  },
+  {
+    "id": "dxvk_needed",
+    "pattern": "err:winediag:wined3d_dll_init.*The GLX extension is missing.|err:d3d:wined3d_check_gl_call",
+    "fix": {
+      "action": "winetricks",
+      "args": ["dxvk"]
+    },
+    "description": "DirectX/OpenGL error. DXVK (Vulkan wrapper) can fix this.",
+    "confidence": 0.85
+  },
+  {
+    "id": "corefonts_missing",
+    "pattern": "err:font:create_font.*Arial.*|err:font:create_font.*Times New Roman.*",
+    "fix": {
+      "action": "winetricks",
+      "args": ["corefonts"]
+    },
+    "description": "Missing standard Windows fonts",
+    "confidence": 0.85
+  },
+  {
+    "id": "change_windows_version_win10",
+    "pattern": "err:module:LdrInitializeThunk.*requires newer Windows version",
+    "fix": {
+      "action": "registry",
+      "args": {"windows_version": "win10"}
+    },
+    "description": "App requires Windows 10 compatibility mode",
+    "confidence": 0.8
+  }
+]

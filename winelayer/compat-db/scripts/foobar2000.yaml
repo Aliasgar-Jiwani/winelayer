@@ -1,0 +1,26 @@
+app_id: foobar2000
+display_name: foobar2000
+version_tested: "2.1.5"
+wine_version: stable
+windows_version: win10
+architecture: win32
+
+dependencies:
+  - vcrun2019
+  - corefonts
+
+registry: []
+
+dxvk: false
+esync: false
+
+post_install: []
+
+known_issues:
+  - description: WASAPI output mode not supported, use DirectSound
+    fix: set_output_directsound
+    severity: minor
+
+status: working
+last_verified: "2025-01"
+contributor: winelayer-team

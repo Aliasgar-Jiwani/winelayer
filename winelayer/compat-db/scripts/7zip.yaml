@@ -1,0 +1,21 @@
+app_id: 7zip
+display_name: 7-Zip
+version_tested: "24.08"
+wine_version: stable
+windows_version: win10
+architecture: win64
+
+dependencies: []
+
+registry: []
+
+dxvk: false
+esync: false
+
+post_install: []
+
+known_issues: []
+
+status: working
+last_verified: "2025-01"
+contributor: winelayer-team

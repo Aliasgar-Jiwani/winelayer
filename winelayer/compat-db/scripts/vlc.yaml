@@ -1,0 +1,24 @@
+app_id: vlc
+display_name: VLC Media Player
+version_tested: "3.0.20"
+wine_version: stable
+windows_version: win10
+architecture: win64
+
+dependencies:
+  - corefonts
+
+registry: []
+
+dxvk: false
+esync: false
+
+post_install: []
+
+known_issues:
+  - description: Hardware acceleration may not work without DXVK
+    severity: minor
+
+status: working
+last_verified: "2025-02"
+contributor: winelayer-team

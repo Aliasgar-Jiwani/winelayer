@@ -1,0 +1,23 @@
+app_id: irfanview
+display_name: IrfanView
+version_tested: "4.67"
+wine_version: stable
+windows_version: win10
+architecture: win64
+
+dependencies:
+  - vcrun2019
+  - corefonts
+
+registry: []
+
+dxvk: false
+esync: false
+
+post_install: []
+
+known_issues: []
+
+status: working
+last_verified: "2025-01"
+contributor: winelayer-team

@@ -1,0 +1,33 @@
+app_id: notepadplusplus
+display_name: Notepad++
+version_tested: "8.6"
+wine_version: staging
+windows_version: win10
+architecture: win64
+
+dependencies:
+  - corefonts
+  - vcrun2019
+
+registry:
+  - key: HKEY_CURRENT_USER\Software\Notepad++
+    value: nativeLook
+    data: "1"
+    type: REG_SZ
+
+dxvk: false
+esync: false
+
+post_install:
+  - action: copy_file
+    src: overrides/npp_config.xml
+    dest: "%APPDATA%\\Notepad++"
+
+known_issues:
+  - description: Spell check DLL crash on first launch
+    fix: disable_spell_check_plugin
+    severity: minor
+
+status: working
+last_verified: "2025-01"
+contributor: winelayer-team
