@@ -8,10 +8,10 @@
 set -e
 
 REPO_URL="https://github.com/Aliasgar-Jiwani/winelayer"
-APPIMAGE_URL="https://github.com/Aliasgar-Jiwani/winelayer/releases/latest/download/WineLayer-x86_64.AppImage"
-INSTALL_DIR="$HOME/.local/bin"
+TAR_URL="https://github.com/Aliasgar-Jiwani/winelayer/releases/latest/download/WineLayer-linux-x86_64.tar.gz"
+INSTALL_DIR="$HOME/.local/share/WineLayer"
+BIN_DIR="$HOME/.local/bin"
 DESKTOP_DIR="$HOME/.local/share/applications"
-ICON_DIR="$HOME/.local/share/icons/hicolor/256x256/apps"
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -66,12 +66,28 @@ else
     echo -e "${GREEN}✓ Wine installed!${RESET}"
 fi
 
-# --- Install WineLayer AppImage ---
+# --- Install WineLayer ---
 echo ""
 echo -e "${GREEN}► Downloading WineLayer...${RESET}"
 mkdir -p "$INSTALL_DIR"
-curl -L --progress-bar "$APPIMAGE_URL" -o "$INSTALL_DIR/WineLayer.AppImage"
-chmod +x "$INSTALL_DIR/WineLayer.AppImage"
+mkdir -p "$BIN_DIR"
+
+# Download to temp file
+TMP_TAR=$(mktemp)
+curl -L --progress-bar "$TAR_URL" -o "$TMP_TAR"
+
+# Extract directly to the local share directory
+echo -e "${GREEN}► Extracting files...${RESET}"
+rm -rf "$INSTALL_DIR"
+mkdir -p "$HOME/.local/share"
+tar -xzf "$TMP_TAR" -C "$HOME/.local/share/"
+rm "$TMP_TAR"
+
+# Ensure the core script is executable
+chmod +x "$INSTALL_DIR/WineLayer.sh"
+
+# Create a symlink in the bin folder so you can just type 'winelayer'
+ln -sf "$INSTALL_DIR/WineLayer.sh" "$BIN_DIR/winelayer"
 
 # --- Desktop Shortcut ---
 echo -e "${GREEN}► Creating desktop entry...${RESET}"
@@ -80,7 +96,7 @@ cat > "$DESKTOP_DIR/winelayer.desktop" << EOF
 [Desktop Entry]
 Name=WineLayer
 Comment=Run Windows apps on Linux — plug and play
-Exec=$INSTALL_DIR/WineLayer.AppImage
+Exec=$INSTALL_DIR/WineLayer.sh
 Icon=winelayer
 Type=Application
 Categories=System;Emulator;
@@ -95,7 +111,7 @@ echo -e "${GREEN}╔════════════════════
 echo -e "${GREEN}║      WineLayer installed! 🎉          ║${RESET}"
 echo -e "${GREEN}╚══════════════════════════════════════╝${RESET}"
 echo ""
-echo -e "  Run it:    ${CYAN}WineLayer.AppImage${RESET}"
+echo -e "  Run it from terminal:    ${CYAN}winelayer${RESET}"
 echo -e "  Or find it in your Application Menu as ${CYAN}WineLayer${RESET}"
 echo ""
 echo -e "  GitHub:    ${CYAN}$REPO_URL${RESET}"
