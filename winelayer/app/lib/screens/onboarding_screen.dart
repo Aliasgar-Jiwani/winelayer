@@ -27,7 +27,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _checkSystem() async {
     try {
-      final status = await ref.read(daemonClientProvider).call('get_system_status');
+      // Ensure we connect to the daemon before trying to send requests!
+      final client = ref.read(daemonClientProvider);
+      if (!client.isConnected) {
+        await ref.read(daemonStatusProvider.notifier).connect();
+      }
+      if (!client.isConnected) {
+        throw StateError('Could not establish connection to daemon');
+      }
+
+      final status = await client.call('get_system_status');
       setState(() {
         _sysStatus = status as Map<String, dynamic>;
         _checking = false;
