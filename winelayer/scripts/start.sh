@@ -7,7 +7,9 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve real path in case of symlinks (e.g. from ~/.local/bin)
+SCRIPT_PATH=$(readlink -f "${BASH_SOURCE[0]}")
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
 
 # --- Check for compiled binaries (release deployment) ---
 # In a deployed release, this script sits right next to the daemon/ and ui/ folders
