@@ -48,6 +48,7 @@ jobs:
             --name winelayer-daemon \
             --add-data "compat-db:compat-db" \
             --hidden-import "sqlalchemy.dialects.sqlite" \
+            --hidden-import "aiosqlite" \
             daemon/main.py
 
       - name: Build Flutter UI
