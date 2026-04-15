@@ -8,12 +8,26 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DAEMON_BIN="$SCRIPT_DIR/../daemon/winelayer-daemon"
-UI_BIN="$SCRIPT_DIR/../ui/winelayer"
 
-# --- Check for compiled binaries (release mode) ---
-if [ -f "$DAEMON_BIN" ] && [ -f "$UI_BIN" ]; then
+# --- Check for compiled binaries (release deployment) ---
+# In a deployed release, this script sits right next to the daemon/ and ui/ folders
+if [ -f "$SCRIPT_DIR/daemon/winelayer-daemon" ] && [ -f "$SCRIPT_DIR/ui/winelayer_app" ]; then
     echo "[WineLayer] Starting compiled release..."
+    "$SCRIPT_DIR/daemon/winelayer-daemon" &
+    DAEMON_PID=$!
+    sleep 1
+    "$SCRIPT_DIR/ui/winelayer_app"
+    kill "$DAEMON_PID" 2>/dev/null || true
+    exit 0
+fi
+
+# --- Check for compiled binaries (local source tree) ---
+# If running compiled bins directly from the scripts folder
+DAEMON_BIN="$SCRIPT_DIR/../daemon/winelayer-daemon"
+UI_BIN="$SCRIPT_DIR/../app/build/linux/x64/release/bundle/winelayer_app"
+
+if [ -f "$DAEMON_BIN" ] && [ -f "$UI_BIN" ]; then
+    echo "[WineLayer] Starting local compiled build..."
     "$DAEMON_BIN" &
     DAEMON_PID=$!
     sleep 1
