@@ -98,9 +98,9 @@ class DaemonClient {
     final jsonStr = '${jsonEncode(request)}\n';
     _socket!.write(jsonStr);
 
-    // Timeout after 60 seconds
+    // Timeout after 20 minutes (1200s) because Wine prefix creation/downloads can take a long time
     return completer.future.timeout(
-      const Duration(seconds: 60),
+      const Duration(seconds: 1200),
       onTimeout: () {
         _pendingRequests.remove(id);
         throw TimeoutException('Request timed out: $method');
