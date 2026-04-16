@@ -495,6 +495,10 @@ class Installer:
         if reporter:
             await reporter("launching", f"Launching {app_id}...")
 
+        proc_obj = None
+        is_async_proc = True
+        log_file = None
+
         if app.execution_engine == "microvm":
             # Hand off entirely to VM Engine Sandbox (Phase 4)
             await vm_manager.run_app_in_vm(app_id, exe_path, reporter)
@@ -518,6 +522,7 @@ class Installer:
                 # Cannot close log_file here since proc runs in background. 
                 # We must leave it open until process exits naturally.
                 logger.info(f"Launched '{app_id}' with PID {proc.pid}")
+                proc_obj = proc
             else:
                 # Windows: launch .exe natively (non-blocking, detached)
                 import subprocess as sp
@@ -530,8 +535,15 @@ class Installer:
                         creationflags=sp.DETACHED_PROCESS | sp.CREATE_NEW_PROCESS_GROUP,
                     )
                     logger.info(f"Launched '{app_id}' natively with PID {proc.pid}")
+                    proc_obj = proc
+                    is_async_proc = False
                 except OSError as e:
                     logger.error(f"Failed to launch '{app_id}': {e}")
+                    if log_file:
+                        try:
+                            log_file.close()
+                        except Exception:
+                            pass
                     raise RuntimeError(f"Failed to launch {exe_path}: {e}")
 
         # Update last_launched
@@ -539,11 +551,45 @@ class Installer:
             result = await session.execute(
                 select(App).where(App.app_id == app_id)
             )
-            app = result.scalar_one()
-            app.last_launched = datetime.now(timezone.utc)
-            app.status = AppStatus.RUNNING
+            app_db = result.scalar_one()
+            app_db.last_launched = datetime.now(timezone.utc)
+            app_db.status = AppStatus.RUNNING
             await session.commit()
-            return app.to_dict()
+            app_dict = app_db.to_dict()
+
+        if proc_obj is not None:
+            async def _monitor_process():
+                try:
+                    if is_async_proc:
+                        await proc_obj.wait()
+                    else:
+                        import asyncio
+                        await asyncio.to_thread(proc_obj.wait)
+                except Exception as e:
+                    logger.error(f"Error monitoring process for '{app_id}': {e}")
+                finally:
+                    if log_file and hasattr(log_file, "close"):
+                        try:
+                            log_file.close()
+                        except Exception:
+                            pass
+                    
+                    try:
+                        async with get_session() as session:
+                            res = await session.execute(
+                                select(App).where(App.app_id == app_id)
+                            )
+                            app_end = res.scalar_one_or_none()
+                            if app_end and app_end.status == AppStatus.RUNNING:
+                                app_end.status = AppStatus.INSTALLED
+                                await session.commit()
+                                logger.info(f"App '{app_id}' closed. Reverted status to INSTALLED.")
+                    except Exception as e:
+                        logger.error(f"Failed to update status on process exit for '{app_id}': {e}")
+
+            asyncio.create_task(_monitor_process())
+
+        return app_dict
 
     async def uninstall_app(self, app_id: str, reporter: Optional[ProgressReporter] = None) -> bool:
         """Uninstall an app: delete its prefix and remove from database."""
