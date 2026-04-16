@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-Linux-orange)](#)
 [![Flutter](https://img.shields.io/badge/UI-Flutter-02569B?logo=flutter)](https://flutter.dev)
 [![Python](https://img.shields.io/badge/Daemon-Python%203.11-3776AB?logo=python)](https://python.org)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)](winelayer/CONTRIBUTING.md)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)](CONTRIBUTING.md)
 
 > **WineLayer is an experience orchestration engine on top of Wine.**  
 > It handles everything — installation, environment isolation, dependency resolution, crash detection and auto-fixing — through a polished modern desktop UI. Zero terminal required.
@@ -50,7 +50,11 @@ This automatically:
 
 ## 📸 Screenshots
 
-> *(Add screenshots here once deployed on Linux)*
+<div align="center">
+  <img src="screenshots/screenshot%201.png" alt="WineLayer" width="45%" />
+  &nbsp;
+  <img src="screenshots/screenshot2.png" alt="WineLayer" width="45%" />
+</div>
 
 ---
 
@@ -142,7 +146,7 @@ flutter run -d linux
 The most impactful way to contribute is to **add a new app to the Catalog**.
 If you got a Windows app running with WineLayer, share your setup!
 
-See **[CONTRIBUTING.md](winelayer/CONTRIBUTING.md)** for the full guide.
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full guide.
 
 ### Quick contribution (no coding required):
 1. Test a Windows app and note which Wine version and Winetricks packages worked
@@ -165,7 +169,7 @@ See **[CONTRIBUTING.md](winelayer/CONTRIBUTING.md)** for the full guide.
 
 WineLayer is free software licensed under the **GNU General Public License v3.0**.
 
-See [winelayer/LICENSE](winelayer/LICENSE) for full terms.
+See [LICENSE](LICENSE) for full terms.
 
 > WineLayer is an independent project and is **not affiliated with or endorsed by** the Wine Project or WineHQ.
 
