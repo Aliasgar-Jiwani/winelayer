@@ -120,6 +120,41 @@ class PrefixManager:
         except FileNotFoundError:
             raise RuntimeError("wineboot not found. Is Wine installed?")
 
+    def _rmtree_onerror(self, func, path, exc_info):
+        """Handle errors when deleting Wine read-only files/directories."""
+        import os
+        import stat
+        try:
+            os.chmod(path, stat.S_IWUSR | stat.S_IXUSR | stat.S_IRUSR)
+            func(path)
+        except Exception as e:
+            logger.debug(f"Failed to delete {path}: {e}")
+
+    async def _clean_linux_shortcuts(self, prefix_path_str: str) -> None:
+        """Find and remove .desktop files created by Wine for this prefix."""
+        import os
+        from pathlib import Path
+        
+        # Paths where Wine commonly creates shortcuts
+        local_share = Path(os.path.expanduser("~/.local/share/applications"))
+        desktop = Path(os.path.expanduser("~/Desktop"))
+        
+        for search_dir in [local_share, desktop]:
+            if not search_dir.exists():
+                continue
+                
+            for file_path in search_dir.rglob("*.desktop"):
+                try:
+                    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                        content = f.read()
+                        
+                        # Wine shortcuts embed the WINEPREFIX in the Exec= line
+                        if prefix_path_str in content:
+                            file_path.unlink()
+                            logger.info(f"Deleted leaked Wine shortcut: {file_path}")
+                except Exception as e:
+                    logger.debug(f"Failed to process shortcut {file_path}: {e}")
+
     async def delete_prefix(self, app_id: str) -> bool:
         """
         Delete a Wine prefix and its database record.
@@ -127,10 +162,16 @@ class PrefixManager:
         """
         prefix_path = self._prefixes_dir / app_id
 
+        if config.is_linux:
+            await self._clean_linux_shortcuts(str(prefix_path))
+
         # Remove from filesystem
         if prefix_path.exists():
-            shutil.rmtree(prefix_path)
-            logger.info(f"Deleted prefix directory: {prefix_path}")
+            try:
+                shutil.rmtree(prefix_path, onerror=self._rmtree_onerror)
+                logger.info(f"Deleted prefix directory: {prefix_path}")
+            except Exception as e:
+                logger.error(f"Error fully deleting prefix directory {prefix_path}: {e}")
 
         # Remove from database
         async with get_session() as session:
